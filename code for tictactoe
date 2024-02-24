@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdbool.h>
+void printBoard(char arr[3][3])
+{
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            printf("%c ", arr[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int fillChoice(char arr[3][3], char symbol)
+{
+    int n;
+    printf("enter the number you want the position of  ");
+    scanf("%d", &n);
+    printf("\n");
+    int r = ((n - 1) / 3);
+    int c = ((n - 1) % 3);
+    if (arr[r][c] == 'X' || arr[r][c] == 'O')
+    {
+        return -1;
+    }
+    printf("the respective position  %d  %d  \n", r, c);
+    arr[r][c] = symbol;
+    return n;
+}
+
+bool hasWon(char arr[3][3], int pos)
+{
+    int r = ((pos - 1) / 3);
+    int c = ((pos - 1) % 3);
+    char symbol = arr[r][c];
+    bool win = true;
+    for (int i = 0; i < 3; i++)
+    {
+        if (arr[r][i] != symbol)
+            win = false;
+    }
+    if (win == true)
+        return win;
+    win = true;
+    for (int i = 0; i < 3; i++)
+    {
+        if (arr[i][c] != symbol)
+            win = false;
+    }
+    if (arr[0][0] == symbol && arr[1][1] == symbol && arr[2][2] == symbol)
+    {
+        win = true;
+    }
+    if (arr[0][2] == symbol && arr[1][1] == symbol && arr[2][0] == symbol)
+    {
+        win = true;
+    }
+    return win;
+}
+
+int main(void)
+{
+    char arr[3][3] = {{'1', '2', '3'}, {'4', '5', '6'}, {'7', '8', '9'}};
+    printBoard(arr);
+    bool win = false;
+    int i = 0;
+    char symbol;
+    printf("X will start the game\n");
+    while (win != true && i < 9)
+    {
+        if (i % 2 == 0)
+            symbol = 'X';
+        else
+            symbol = 'O';
+        int pos = fillChoice(arr, symbol);
+        if (pos < 0)
+        {
+            // Position is not yet filled;
+            printf("already filled\n");
+            continue;
+        }
+        win = hasWon(arr, pos);
+        printf("%d\n", win);
+        printBoard(arr);
+        i++;
+    }
+    if (win == true)
+    {
+        printf("%c WON THE MATCH :)\n", symbol);
+    }
+    else
+    {
+        printf("MATCH DRAW :(\n");
+    }
+}
